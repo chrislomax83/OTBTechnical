@@ -3,24 +3,19 @@ using OTBTechnical.Data.Models;
 
 namespace OTBTechnical.Data;
 
-public class HotelDataLoader
+public class HotelDataLoader : AbstractDataLoader<HotelDataModel>
 {
-    private const string FileName = "./Data/DataFiles/HotelData.json";
-    private IReadOnlyList<HotelDataModel> _data = [];
-    
-    private async Task LoadData()
+    private const string DefaultDataFileName = "./Data/DataFiles/HotelData.json";
+
+    public HotelDataLoader()
     {
-        using StreamReader fileReader = new(FileName);
-
-        var fileContents = await fileReader.ReadToEndAsync();
-
-        _data = JsonSerializer.Deserialize<IReadOnlyList<HotelDataModel>>(fileContents) ?? [];
+        SetFileName(DefaultDataFileName);
     }
     
-    public async Task<IReadOnlyList<HotelDataModel>> GetData()
+    public override async Task<IReadOnlyList<HotelDataModel>> GetData()
     {
         await LoadData();
 
-        return _data;
+        return Data;
     }
 }

@@ -15,7 +15,7 @@ public record HotelDataModel(
     string[] LocalAirports,
     [property: JsonPropertyName(name: "nights"), JsonRequired]
     int Nights
-)
+):IDataModel
 {
     public decimal TotalCost => PricePerNight * Nights;
 };
