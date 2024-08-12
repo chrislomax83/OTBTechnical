@@ -1,29 +1,15 @@
 using OTBTechnical.Data.Models;
+using OTBTechnical.Features.FlightSearch.Models.Requests;
 using OTBTechnical.Features.HotelSearch.Models.Requests;
+using OTBTechnical.Features.Shared.DataFilter;
 
 namespace OTBTechnical.Features.HotelSearch;
 
-public class HotelDataFilter
+public class HotelDataFilter(HotelSearchRequest request, IReadOnlyList<HotelDataModel> data)
+    : AbstractDataFilter<HotelSearchRequest, HotelDataModel>(request, data)
 {
-    private readonly IReadOnlyList<HotelDataModel> _data;
-    private IQueryable<HotelDataModel> _filteredData = null!;
-
-    private readonly HotelSearchRequest _request;
     
-    public HotelDataFilter(HotelSearchRequest request, IReadOnlyList<HotelDataModel> data)
-    {
-        _data = data;
-        _request = request;
-        _filteredData = data.AsQueryable();
-    }
-    
-    public List<HotelDataModel> GetResults()
-    {
-        ApplyFilters();
-        return _filteredData.ToList();
-    }
-
-    private void ApplyFilters()
+    protected override void ApplyFilters()
     {
         FilterByNoOfNights();
         FilterByArrivalDate();
@@ -32,17 +18,17 @@ public class HotelDataFilter
 
     private void FilterByNoOfNights()
     {
-        _filteredData = _filteredData.Where(e => e.Nights.Equals(_request.NoOfNights));
+        FilteredData = FilteredData.Where(e => e.Nights.Equals(Request.NoOfNights));
     }
 
     private void FilterByArrivalDate()
     {
-        var requestArrivalDate = DateOnly.Parse(_request.ArrivalDate);
-        _filteredData = _filteredData.Where(e => e.ArrivalDate.Equals(requestArrivalDate));
+        var requestArrivalDate = DateOnly.Parse(Request.ArrivalDate);
+        FilteredData = FilteredData.Where(e => e.ArrivalDate.Equals(requestArrivalDate));
     }
 
     private void FilterByDestinationAirport()
     {
-        _filteredData = _filteredData.Where(e => e.LocalAirports.Contains(_request.DestinationAirport));
+        FilteredData = FilteredData.Where(e => e.LocalAirports.Contains(Request.DestinationAirport));
     }
 }
