@@ -1,3 +1,4 @@
+using FluentValidation;
 using OTBTechnical.Features.FlightSearch;
 using OTBTechnical.Features.HolidaySearch;
 using OTBTechnical.Features.HolidaySearch.Models.Requests;
@@ -67,5 +68,24 @@ public class HolidaySearchEngineTests
         var results = await holidaySearchEngine.Search(holidaySearchRequest);
         
         Assert.Empty(results);
+    }
+    
+    [Theory]
+    [InlineData("", "AGP", "2023/07/01", 7)]
+    [InlineData("London", "PMI2", "2023/06/15", 10)]
+    [InlineData("Any", "LPA", "2022/13/10", 14)]
+    [InlineData("Any", "LPA", "2022/13/10", 0)]
+    public async Task Should_Throw_ValidationException_For_Invalid_Search_Term_Arguments(
+        string departingFrom, string travellingTo, string departureDate, int holidayDuration)
+    {
+        var flightSearchEngine = new FlightSearchEngine();
+
+        var hotelSearchEngine = new HotelSearchEngine();
+
+        var holidaySearchEngine = new HolidaySearchEngine(flightSearchEngine, hotelSearchEngine);
+
+        var holidaySearchRequest = new HolidaySearchRequest(departingFrom, travellingTo, departureDate, holidayDuration);
+        
+        await Assert.ThrowsAsync<ValidationException>(() => holidaySearchEngine.Search(holidaySearchRequest));
     }
 }
