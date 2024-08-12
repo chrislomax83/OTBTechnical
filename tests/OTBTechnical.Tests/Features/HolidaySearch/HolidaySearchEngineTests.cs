@@ -74,7 +74,7 @@ public class HolidaySearchEngineTests
     [InlineData("", "AGP", "2023/07/01", 7)]
     [InlineData("London", "PMI2", "2023/06/15", 10)]
     [InlineData("Any", "LPA", "2022/13/10", 14)]
-    [InlineData("Any", "LPA", "2022/13/10", 0)]
+    [InlineData("Any", "LPA", "2022/12/10", 0)]
     public async Task Should_Throw_ValidationException_For_Invalid_Search_Term_Arguments(
         string departingFrom, string travellingTo, string departureDate, int holidayDuration)
     {
