@@ -37,6 +37,14 @@
       <Content Include="Data\DataFiles\InvalidJsonData.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Data\DataFiles\InvalidFlightData.json" />
+      <Content Include="Data\DataFiles\InvalidFlightData.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Data\DataFiles\InvalidHotelData.json" />
+      <Content Include="Data\DataFiles\InvalidHotelData.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

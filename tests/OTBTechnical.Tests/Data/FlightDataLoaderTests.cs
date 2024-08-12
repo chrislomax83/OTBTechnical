@@ -1,4 +1,5 @@
 using OTBTechnical.Data;
+using OTBTechnical.Data.Exceptions;
 
 namespace OTBTechnical.Tests.Data;
 
@@ -40,5 +41,17 @@ public class FlightDataLoaderTests
         Assert.Equal("TFS", firstRecord.To);
         Assert.Equal(470, firstRecord.Price);
         Assert.Equal(new DateOnly(2023, 07, 01), firstRecord.DepartureDate);
+    }
+    
+    [Fact]
+    public async Task Should_Throw_DataFileDeserializationException_With_Missing_DepartureDate_In_Invalid_Flight_Data()
+    {
+        var dataLoader = new FlightDataLoader();
+        var invalidJsonFile = "./Data/DataFiles/InvalidFlightData.json";
+        
+        // Set the filename to invalid json
+        dataLoader.SetFileName(invalidJsonFile);
+
+        await Assert.ThrowsAsync<DataFileDeserializationException>(() => dataLoader.GetData());
     }
 }
