@@ -1,6 +1,8 @@
+using FluentValidation;
 using OTBTechnical.Data;
 using OTBTechnical.Data.Models;
 using OTBTechnical.Features.HotelSearch.Models.Requests;
+using OTBTechnical.Features.HotelSearch.Validators;
 
 namespace OTBTechnical.Features.HotelSearch;
 
@@ -29,6 +31,9 @@ public class HotelSearchEngine
             await LoadData();
         }
 
+        var hotelRequestValidator = new HotelSearchRequestValidator();
+        await hotelRequestValidator.ValidateAndThrowAsync(request);
+        
         var hotelDataFilter = new HotelDataFilter(request, _data!);
 
         return hotelDataFilter.GetResults();
