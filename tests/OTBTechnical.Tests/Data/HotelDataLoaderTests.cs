@@ -1,4 +1,5 @@
 using OTBTechnical.Data;
+using OTBTechnical.Data.Exceptions;
 
 namespace OTBTechnical.Tests.Data;
 
@@ -43,6 +44,18 @@ public class HotelDataLoaderTests
         Assert.Equal(7, firstRecord.Nights);
         Assert.Equal(100, firstRecord.PricePerNight);
         Assert.Equal(new DateOnly(2022, 11, 05), firstRecord.ArrivalDate);
+    }
+    
+    [Fact]
+    public async Task Should_Throw_DataFileDeserializationException_With_Missing_ArrivalDate_In_Invalid_Hotel_Data()
+    {
+        var dataLoader = new HotelDataLoader();
+        var invalidJsonFile = "./Data/DataFiles/InvalidHotelData.json";
+        
+        // Set the filename to invalid json
+        dataLoader.SetFileName(invalidJsonFile);
+
+        await Assert.ThrowsAsync<DataFileDeserializationException>(() => dataLoader.GetData());
     }
     
 }
