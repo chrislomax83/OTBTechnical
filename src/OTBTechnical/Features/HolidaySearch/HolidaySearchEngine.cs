@@ -1,8 +1,10 @@
+using FluentValidation;
 using OTBTechnical.Data.Models;
 using OTBTechnical.Features.FlightSearch;
 using OTBTechnical.Features.FlightSearch.Models.Requests;
 using OTBTechnical.Features.HolidaySearch.Models.Requests;
 using OTBTechnical.Features.HolidaySearch.Models.Response;
+using OTBTechnical.Features.HolidaySearch.Validators;
 using OTBTechnical.Features.HotelSearch;
 using OTBTechnical.Features.HotelSearch.Models.Requests;
 
@@ -24,6 +26,11 @@ public class HolidaySearchEngine
 
     public async Task<IReadOnlyList<HolidaySearchResponse>> Search(HolidaySearchRequest request)
     {
+
+        var holidaySearchValidator = new HolidaySearchRequestValidator();
+
+        await holidaySearchValidator.ValidateAndThrowAsync(request);
+        
         var flightSearchRequest =
             new FlightSearchRequest(request.DepartingFrom, request.TravellingTo, request.DepartureDate);
 
