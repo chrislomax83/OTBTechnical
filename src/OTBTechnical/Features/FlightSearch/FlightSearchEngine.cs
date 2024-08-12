@@ -1,6 +1,8 @@
+using FluentValidation;
 using OTBTechnical.Data;
 using OTBTechnical.Data.Models;
 using OTBTechnical.Features.FlightSearch.Models.Requests;
+using OTBTechnical.Features.FlightSearch.Validators;
 
 namespace OTBTechnical.Features.FlightSearch;
 
@@ -30,6 +32,8 @@ public class FlightSearchEngine
             await LoadData();
         }
         
+        var flightRequestValidator = new FlightSearchRequestValidator();
+        await flightRequestValidator.ValidateAndThrowAsync(request);
 
         var flightDataFilter = new FlightDataFilter(request, _data!);
 
